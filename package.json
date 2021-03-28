@@ -17,6 +17,7 @@
         "@babel/plugin-proposal-private-methods": "7.13.0",
         "@babel/preset-react": "^7.12.13",
         "@sendgrid/mail": "^7.4.2",
+        "axios": "^0.21.1",
         "bcryptjs": "^2.4.3",
         "connect-flash": "^0.1.1",
         "cors": "2.8.5",
