@@ -10,7 +10,8 @@ const list = async (req, res) => {
 };
 const copy = async (req, res) => {
   try {
-    const collection = await Collection.copy();
+    const id = req.params.id;
+    const collection = await Collection.copy(id);
     res.status(201).json(collection);
   } catch (error) {
     res.status(400).json({ message: error.message });

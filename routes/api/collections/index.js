@@ -4,5 +4,6 @@ const ContactsController = require('../../../controllers/collections.js');
 // const guard = require('../../../model/helpers/guard');
 
 router.get('/', ContactsController.list);
-router.get('/copy', ContactsController.copy);
+router.post('/copy/:id', ContactsController.copy);
+
 module.exports = router;

@@ -2,14 +2,14 @@ const Collection = require('../model/schemas/collection.js');
 require('../model/schemas/collection.js');
 require('dotenv').config();
 const axios = require('axios');
-const COLLECTIONS_URL = `https://api.themoviedb.org/3/collection/10?api_key=ca745db198ca3fbe8342f07480e09405&language=en-US`;
 
-// axios.defaults.headers.common = {
-//   api_key: process.env.MOVIEDB_API_KEY,
-// };
+const COLLECTIONS_URL = `https://api.themoviedb.org/3/collection`;
+const LANG = 'en-US';
 
 const copy = async id => {
-  const { data } = await axios.get(COLLECTIONS_URL);
+  const { data } = await axios.get(
+    `${COLLECTIONS_URL}/${id}?api_key=${process.env.MOVIEDB_API_KEY}&language=${LANG}`,
+  );
 
   const body = {
     id: data.id,
