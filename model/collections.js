@@ -4,11 +4,11 @@ require('dotenv').config();
 const axios = require('axios');
 
 const COLLECTIONS_URL = `https://api.themoviedb.org/3/collection`;
-const LANG = 'en-US';
-
+const EN = 'en-US';
+const RU = 'ru-RU';
 const copy = async id => {
   const { data } = await axios.get(
-    `${COLLECTIONS_URL}/${id}?api_key=${process.env.MOVIEDB_API_KEY}&language=${LANG}`,
+    `${COLLECTIONS_URL}/${id}?api_key=${process.env.MOVIEDB_API_KEY}&language=${RU}`,
   );
 
   const body = {
