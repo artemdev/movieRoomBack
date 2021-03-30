@@ -3,3 +3,4 @@ node_modules
 .prettierrc.json
 .eslintrc.js
 .prettierrc
+.DS_Store
