@@ -7,6 +7,9 @@ const userSchema = new Schema(
     title: {
       type: String,
     },
+    userId: {
+      type: String,
+    },
     votes: {
       type: String,
     },
@@ -21,6 +24,9 @@ const userSchema = new Schema(
       default: true,
     },
     movies: {
+      type: Array,
+    },
+    votes: {
       type: Array,
     },
   },
