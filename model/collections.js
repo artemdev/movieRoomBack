@@ -1,4 +1,5 @@
 const Collection = require('../model/schemas/collection.js');
+const mongoose = require('mongoose');
 require('../model/schemas/collection.js');
 require('dotenv').config();
 const axios = require('axios');
@@ -25,12 +26,9 @@ const list = async () => {
   return await Collection.find({});
 };
 
-// const findById = async (id, userId) => {
-//   return await Contact.findOne({ _id: id, owner: userId }).populate({
-//     path: 'owner',
-//     select: 'name, sex, email-_id',
-//   });
-// };
+const findById = async id => {
+  return await Collection.findOne({ id });
+};
 
 // const remove = async (id, userId) => {
 //   const contact = await Contact.findOneAndRemove({ _id: id, owner: userId });
@@ -56,4 +54,5 @@ const list = async () => {
 module.exports = {
   copy,
   list,
+  findById,
 };

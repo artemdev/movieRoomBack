@@ -9,6 +9,17 @@ const list = async (req, res) => {
   }
 };
 
+const findById = async (req, res) => {
+  console.log(req.params);
+  try {
+    const id = req.params.id;
+    const collection = await Collection.findById(id);
+    res.status(200).json(collection);
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+};
+
 const copy = async (req, res) => {
   try {
     const id = req.params.id;
@@ -22,4 +33,5 @@ const copy = async (req, res) => {
 module.exports = {
   list,
   copy,
+  findById,
 };
