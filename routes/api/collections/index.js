@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const ContactsController = require('../../../controllers/collections.js');
-router.get('/', ContactsController.list);
-router.post('/copy/:id', ContactsController.copy);
+const CollectionsController = require('../../../controllers/collections.js');
+router.get('/', CollectionsController.list);
+router.get('/:id', CollectionsController.findById);
+router.post('/copy/:id', CollectionsController.copy);
 
 module.exports = router;
