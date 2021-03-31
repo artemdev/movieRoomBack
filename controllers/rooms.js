@@ -6,7 +6,6 @@ require('dotenv').config();
 const create = async (req, res) => {
   try {
     const body = req.body;
-    console.log(body);
     const room = await Rooms.create(body);
     return res.status(httpCode.OK).json(room);
   } catch (error) {

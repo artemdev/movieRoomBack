@@ -19,9 +19,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/collections', collectionsRouter);
-app.use('/auth', authRouter);
-app.use('/users', usersRouter);
-app.use('/rooms', roomsRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/rooms', roomsRouter);
 
 app.get('/', (req, res) => {
   res.send(req.query);
