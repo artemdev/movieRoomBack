@@ -8,3 +8,6 @@ POST https://movierooms.herokuapp.com/api/collections/copy/:id - скопиро�
 #rooms <br />
 GET https://movierooms.herokuapp.com/api/rooms - все комнаты <br />
 POST https://movierooms.herokuapp.com/api/rooms - создать комнату принимает body <br />
+
+#mailchimp
+POST https://movierooms.herokuapp.com/mailchimp/subscribe
