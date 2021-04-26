@@ -5,7 +5,9 @@ const list = async (req, res) => {
   try {
     // const userId = req.user._id;
     const { roomId, userId } = req.body;
-    const votes = await Votes.unvoted(roomId, userId);
+    //TODO создать макссив votes после присоединения в команту если его нет
+    const votes = await Votes.findUnvoted(roomId, userId);
+
     res.status(200).json(votes);
   } catch (error) {
     res.status(401).json({ message: error.message });
@@ -108,15 +110,17 @@ const mockup = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { roomId, movieId, movieData, userId } = req.body;
+    const { userId, voteId, like } = req.body;
     const _id = mongoose.Types.ObjectId(userId);
+    const vote = Votes.findOneAndUpdate({ voteId, owner: userId }, { like });
     const result = await Votes.create({
       roomId,
       movieId,
       movieData,
       owner: _id,
     });
-    res.status(201).json(result);
+    const nextVote = await Votes.findOne({ roomId, userId, like: undefined });
+    res.status(201).json(nextVote);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
