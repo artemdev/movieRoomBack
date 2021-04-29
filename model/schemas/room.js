@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { nanoid } = require('nanoid');
 
 const { Schema, SchemaTypes, model } = mongoose;
 
@@ -15,13 +16,15 @@ const roomSchema = new Schema(
     },
     totalVotes: {
       type: String,
-      default: '10',
+      default: '0',
     },
     movies: {
       type: Array,
     },
     url: {
       type: String,
+      default: nanoid(),
+      required: [true, 'Please specify url'],
     },
     owner: {
       type: SchemaTypes.ObjectId,
@@ -31,7 +34,9 @@ const roomSchema = new Schema(
   { versionKey: false, timestamps: true },
 );
 
-//generate url before create
+roomSchema.methods.setUrl = async function () {
+  return this;
+};
 
 const Room = model('room', roomSchema);
 

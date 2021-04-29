@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Users = require('../model/users');
 const { httpCode } = require('../model/helpers/constants');
-const EmailService = require('../services/email');
+// const EmailService = require('../services/email');
 const { nanoid } = require('nanoid');
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET;
@@ -19,13 +19,13 @@ const reg = async (req, res) => {
         message: 'Email in use',
       });
     }
-    const verifyToken = nanoid();
-    const emailService = new EmailService(process.env.NODE_ENV);
-    await emailService.sendEmail(verifyToken, email, name);
+    // const verifyToken = nanoid();
+    // const emailService = new EmailService(process.env.NODE_ENV);
+    // await emailService.sendEmail(verifyToken, email, name);
     const newUser = await Users.create({
       ...req.body,
-      verify: false,
-      verifyToken,
+      // verify: false,
+      // verifyToken,
     });
     return res.status(httpCode.CREATE).json({
       status: 'success',
@@ -49,7 +49,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await Users.findByEmail(email);
     const validPassword = await user.validPassword(password);
-    if (!user || !validPassword || !user.verify) {
+    if (!user || !validPassword) {
       return res.status(httpCode.UNAUTHORIZED).json({
         status: 'error',
         code: httpCode.UNAUTHORIZED,
