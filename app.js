@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
-app.use('/votes', votesRouter);
+app.use('/votes', guard, votesRouter);
 app.use('/rooms', guard, roomsRouter);
 app.use('/mailchimp', mailChimpRouter);
 

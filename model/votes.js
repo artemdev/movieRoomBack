@@ -1,6 +1,6 @@
 const Vote = require('../model/schemas/vote.js');
 
-const unvoted = async (roomId, userId) => {
+const withoutLike = async (roomId, userId) => {
   return await Vote.find({ roomId: roomId, owner: userId, like: undefined });
 };
 
@@ -20,8 +20,22 @@ const unvoted = async (roomId, userId) => {
 //   }
 // };
 
-const create = async body => {
-  return await Vote.create(body);
+const create = async (body, owner) => {
+  return await Vote.create({ ...body, owner });
+};
+
+const createForRoom = async roomId => {
+  const room = await Room.findOne({ roomId });
+  const userId = req.user.id;
+  room.movies.forEach(movie => {
+    const { roomId, movieId, movieData } = movie;
+    Vote.findOrCreate({
+      movieData,
+      movieId,
+      userId,
+      roomId,
+    });
+  });
 };
 
 // const update = async (contactId, body, userId) => {
@@ -33,7 +47,8 @@ const create = async body => {
 // };
 
 module.exports = {
-  unvoted,
+  withoutLike,
+  createForRoom,
   //   findById,
   //   remove,
   create,

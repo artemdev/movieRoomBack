@@ -13,9 +13,6 @@ const voteSchema = new Schema(
     roomId: {
       type: String,
     },
-    password: {
-      type: String,
-    },
     like: {
       type: Boolean,
       default: undefined,
