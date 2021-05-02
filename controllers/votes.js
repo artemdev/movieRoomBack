@@ -2,8 +2,6 @@ const Votes = require('../model/votes.js');
 
 const list = async (req, res) => {
   try {
-    // const userId = req.user._id;
-
     const { roomId, userId } = req.body;
     //TODO создать макссив votes после присоединения в команту если его нет
     const votes = await Votes.find({ roomId, owner: userId });
@@ -88,38 +86,12 @@ const mockup = async (req, res) => {
   res.status(200).json(data);
 };
 
-// const getById = async (req, res) => {
-//   try {
-//     const result = await Contacts.findById(req.params.contactId);
-//     res.status(201).json(result);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// };
-
-// const remove = async (req, res) => {
-//   try {
-//     const userId = req.user.id;
-//     await Contacts.remove(req.params.contactId, userId);
-//     res.status(201).json({ message: 'Deleted!' });
-//   } catch (error) {
-//     res.status(404).json({ message: error.message });
-//   }
-// };
-
 const create = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { voteId, like } = req.body;
-    await Votes.findOneAndUpdate({ voteId, owner: userId }, { like });
-    // await Votes.create({
-    //   roomId,
-    //   movieId,
-    //   movieData,
-    //   owner: _id,
-    // });
-    const nextVote = await Votes.findOne({ roomId, userId, like: undefined });
-    res.status(201).json(nextVote);
+    const { roomId, movieId } = req.user.id;
+
+    Votes.findOrCreate(roomId, movieId, userId);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
