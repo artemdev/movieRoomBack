@@ -38,9 +38,20 @@ const createForRoom = async roomId => {
   });
 };
 
-const findOrCreate = (roomId, movieId, owner, like, res) => {
-  Vote.findOrCreate({ roomId, movieId }, { like }, { owner }, (_, vote) => {
-    res.status(200).json(vote);
+const findOrCreate = async (roomId, movieId, owner, like, result) => {
+  await Vote.findOrCreate(
+    { roomId, movieId },
+    { like },
+    { owner },
+    (_, vote) => {
+      result.currentVote = vote;
+    },
+  );
+};
+
+const nextVote = async (roomId, movieId, owner, result) => {
+  return await Vote.findOrCreate({ roomId, movieId }, { owner }, (_, vote) => {
+    result.nextVote = vote;
   });
 };
 
@@ -48,5 +59,6 @@ module.exports = {
   withoutLike,
   createForRoom,
   findOrCreate,
+  nextVote,
   create,
 };
