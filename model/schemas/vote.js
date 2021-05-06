@@ -18,6 +18,7 @@ const voteSchema = new Schema(
     like: {
       type: Boolean,
       default: undefined,
+      required: [true, 'like is required'],
     },
     owner: {
       type: SchemaTypes.ObjectId,

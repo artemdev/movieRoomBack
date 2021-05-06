@@ -89,9 +89,9 @@ const mockup = async (req, res) => {
 const create = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { roomId, movieId } = req.user.id;
+    const { roomId, movieId, like } = req.body;
 
-    Votes.findOrCreate(roomId, movieId, userId);
+    Votes.findOrCreate(roomId, movieId, userId, like, res);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

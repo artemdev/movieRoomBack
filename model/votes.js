@@ -38,18 +38,9 @@ const createForRoom = async roomId => {
   });
 };
 
-const update = async (contactId, body, userId) => {
-  return await Contact.findOneAndUpdate(
-    { _id: contactId, owner: userId },
-    { ...body },
-    { new: true },
-  );
-};
-const findOrCreate = (roomId, movieId, owner) => {
-  // To search by one set of criteria and to save another set, simply use a second object:
-  Vote.findOrCreate({ roomId }, { movieId }, { owner }, (err, result) => {
-    // my new or existing model is loaded as result
-    console.log(result);
+const findOrCreate = (roomId, movieId, owner, like, res) => {
+  Vote.findOrCreate({ roomId, movieId }, { like }, { owner }, (_, vote) => {
+    res.status(200).json(vote);
   });
 };
 
