@@ -91,7 +91,7 @@ const create = async (req, res) => {
     const userId = req.user.id;
     const { roomId, movieId, nextMovie, like } = req.body;
     let result = {};
-    // send current vote
+    // send current votes
     await Votes.findOrCreate(roomId, movieId, userId, like, result);
     // get next
     await Votes.nextVote(roomId, nextMovie, userId, result);
