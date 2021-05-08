@@ -89,14 +89,12 @@ const mockup = async (req, res) => {
 const create = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { roomId, movieId, nextMovie, like } = req.body;
-    let result = {};
+    const { roomId, movieId, nextMovieId, like } = req.body;
     // send current votes
-    await Votes.findOrCreate(roomId, movieId, userId, like, result);
+    await Votes.findOrCreate(roomId, movieId, userId, like, req);
     // get next
-    await Votes.nextVote(roomId, nextMovie, userId, result);
+    await Votes.nextVote(roomId, nextMovieId, userId, req, res);
     // return next vote
-    res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

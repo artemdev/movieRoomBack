@@ -38,21 +38,29 @@ const createForRoom = async roomId => {
   });
 };
 
-const findOrCreate = async (roomId, movieId, owner, like, result) => {
+const findOrCreate = async (roomId, movieId, owner, like, req) => {
   await Vote.findOrCreate(
     { roomId, movieId },
     { like },
     { owner },
     (_, vote) => {
-      result.currentVote = vote;
+      req.currentVote = vote;
     },
   );
 };
 
-const nextVote = async (roomId, movieId, owner, result) => {
-  return await Vote.findOrCreate({ roomId, movieId }, { owner }, (_, vote) => {
-    result.nextVote = vote;
-  });
+const nextVote = async (roomId, movieId, owner, req, res) => {
+  return await Vote.findOrCreate(
+    { roomId, movieId },
+    { owner },
+    (_, nextVote) => {
+      const data = {
+        next: nextVote,
+        current: req.currentVote,
+      };
+      res.status(200).json(data);
+    },
+  );
 };
 
 module.exports = {
