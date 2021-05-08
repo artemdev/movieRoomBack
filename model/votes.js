@@ -28,8 +28,8 @@ const create = async (roomId, movieId, userId, like = null) => {
   });
 };
 
-const find = async (roomId, movieId, userId) => {
-  return await Vote.findOne({ roomId, movieId, owner: userId });
+const find = async (roomId, userId) => {
+  return await Vote.findOne({ roomId, owner: userId });
 };
 
 const createForRoom = async roomId => {

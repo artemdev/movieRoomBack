@@ -1,4 +1,5 @@
 const Votes = require('../model/votes.js');
+const Rooms = require('../model/rooms.js');
 
 const list = async (req, res) => {
   try {
@@ -90,26 +91,41 @@ const create = async (req, res) => {
   try {
     const userId = req.user.id;
     const { roomId, movieId, nextMovieId, like } = req.body;
+    console.log(room);
+    // create vote or skip if vote already exists
+    const currentVote =
+      (await Votes.find(roomId, userId)) ||
+      (await Votes.create(roomId, movieId, userId, like));
 
-    let currentVote = await Votes.find(roomId, movieId, userId);
-
-    if (!currentVote) {
-      currentVote = await Votes.create(roomId, movieId, userId, like);
-    }
-    if (!nextMovieId) {
-      res.status(200).json({ message: [] });
-    }
-
-    let nextVote = await Votes.find(roomId, nextMovieId, userId);
-
-    if (!nextVote) {
-      nextVote = await Votes.create(roomId, nextMovieId, userId);
-    }
-    res.status(200).json({ current: currentVote, next: nextVote });
-    // return next vote
+    // array of user votes in this room
+    const userVotes = await Votes.find(roomId, userId);
+    // const userMovies = userVotes.data.movies
+    // array of rooms movies
+    const room = await Rooms.findById(roomId);
+    // const roomMovies = room.data.movies
+    // array of unvoted movies
+    // const unvotedMovies
+    // send unvoted movie as next vote
+    // const nextVote = unvotedMovies[0];
+    // res.status(200).json({nextVote, currentVote});
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.log(error);
   }
+
+  //   if (!nextMovieId) {
+  //     res.status(200).json({ message: [] });
+  //   }
+
+  //   let nextVote = await Votes.find(roomId, nextMovieId, userId);
+
+  //   if (!nextVote) {
+  //     nextVote = await Votes.create(roomId, nextMovieId, userId);
+  //   }
+  //   res.status(200).json({ current: currentVote, next: nextVote });
+  //   // return next vote
+  // } catch (error) {
+  //   res.status(400).json({ message: error.message });
+  // }
 };
 
 module.exports = {
