@@ -19,9 +19,17 @@ const withoutLike = async (roomId, userId) => {
 //     throw new Error('Contact not found');
 //   }
 // };
+const create = async (roomId, movieId, userId, like = null) => {
+  return await Vote.create({
+    roomId,
+    movieId,
+    owner: userId,
+    like,
+  });
+};
 
-const create = async (body, owner) => {
-  return await Vote.create({ ...body, owner });
+const find = async (roomId, movieId, userId) => {
+  return await Vote.findOne({ roomId, movieId, owner: userId });
 };
 
 const createForRoom = async roomId => {
@@ -38,35 +46,9 @@ const createForRoom = async roomId => {
   });
 };
 
-const findOrCreate = async (roomId, movieId, owner, like, req) => {
-  await Vote.findOrCreate(
-    { roomId, movieId },
-    { like },
-    { owner },
-    (_, vote) => {
-      req.currentVote = vote;
-    },
-  );
-};
-
-const nextVote = async (roomId, movieId, owner, req, res) => {
-  return await Vote.findOrCreate(
-    { roomId, movieId },
-    { owner },
-    (_, nextVote) => {
-      const data = {
-        next: nextVote,
-        current: req.currentVote,
-      };
-      res.status(200).json(data);
-    },
-  );
-};
-
 module.exports = {
   withoutLike,
   createForRoom,
-  findOrCreate,
-  nextVote,
   create,
+  find,
 };

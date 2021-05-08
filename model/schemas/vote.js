@@ -1,5 +1,3 @@
-const findOrCreate = require('mongoose-find-or-create');
-
 const mongoose = require('mongoose');
 
 const { Schema, SchemaTypes, model } = mongoose;
@@ -26,8 +24,6 @@ const voteSchema = new Schema(
   },
   { versionKey: false, timestamps: true },
 );
-
-voteSchema.plugin(findOrCreate);
 
 const Vote = model('vote', voteSchema);
 

@@ -90,10 +90,19 @@ const create = async (req, res) => {
   try {
     const userId = req.user.id;
     const { roomId, movieId, nextMovieId, like } = req.body;
-    // send current votes
-    await Votes.findOrCreate(roomId, movieId, userId, like, req);
-    // get next
-    await Votes.nextVote(roomId, nextMovieId, userId, req, res);
+
+    let currentVote = await Votes.find(roomId, movieId, userId);
+
+    if (!currentVote) {
+      currentVote = await Votes.create(roomId, movieId, userId, like);
+    }
+
+    let nextVote = await Votes.find(roomId, nextMovieId, userId);
+
+    if (!nextVote) {
+      nextVote = await Votes.create(roomId, nextMovieId, userId);
+    }
+    res.status(200).json({ current: currentVote, next: nextVote });
     // return next vote
   } catch (error) {
     res.status(400).json({ message: error.message });
