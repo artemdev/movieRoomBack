@@ -96,6 +96,9 @@ const create = async (req, res) => {
     if (!currentVote) {
       currentVote = await Votes.create(roomId, movieId, userId, like);
     }
+    if (!nextMovieId) {
+      res.status(200).json({ message: [] });
+    }
 
     let nextVote = await Votes.find(roomId, nextMovieId, userId);
 
