@@ -19,9 +19,20 @@ const withoutLike = async (roomId, userId) => {
 //     throw new Error('Contact not found');
 //   }
 // };
+const create = async (roomId, movieId, userId, like = null) => {
+  return await Vote.create({
+    roomId,
+    movieId,
+    owner: userId,
+    like,
+  });
+};
+const findOne = async (roomId, userId) => {
+  return await Vote.findOne({ roomId, owner: userId });
+};
 
-const create = async (body, owner) => {
-  return await Vote.create({ ...body, owner });
+const find = async (roomId, userId) => {
+  return await Vote.find({ roomId, owner: userId });
 };
 
 const createForRoom = async roomId => {
@@ -38,24 +49,10 @@ const createForRoom = async roomId => {
   });
 };
 
-const update = async (contactId, body, userId) => {
-  return await Contact.findOneAndUpdate(
-    { _id: contactId, owner: userId },
-    { ...body },
-    { new: true },
-  );
-};
-const findOrCreate = (roomId, movieId, owner) => {
-  // To search by one set of criteria and to save another set, simply use a second object:
-  Vote.findOrCreate({ roomId }, { movieId }, { owner }, (err, result) => {
-    // my new or existing model is loaded as result
-    console.log(result);
-  });
-};
-
 module.exports = {
   withoutLike,
   createForRoom,
-  findOrCreate,
   create,
+  find,
+  findOne,
 };
