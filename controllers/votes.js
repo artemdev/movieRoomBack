@@ -1,12 +1,6 @@
 const Votes = require('../model/votes.js');
 const Rooms = require('../model/rooms.js');
 
-Array.prototype.diff = function (movies) {
-  return this.filter(function (vote) {
-    return movies.movieId === vote.movieId;
-  });
-};
-
 const list = async (req, res) => {
   try {
     const { roomId } = req.body;
@@ -15,16 +9,16 @@ const list = async (req, res) => {
     const room = await Rooms.findById(roomId);
     const roomMovies = room.movies;
     const userVotes = (await Votes.find(roomId, userId)) || [];
+    console.log(userVotes);
+    console.log(roomMovies);
+    const findMoviesWithoutVote = (accumulator, movie) => {
+      !userVotes.filter(vote => vote.movieId === movie.id)[0]
+        ? accumulator.push(movie)
+        : null;
+      return accumulator;
+    };
+    const movies = roomMovies.reduce(findMoviesWithoutVote, []);
 
-    // const findMoviesWithoutVote = (accumulator, movie) => {
-    //   !!userVotes.filter(vote => vote.movieId === movie.id)
-    //     ? accumulator.push(movie)
-    //     : null;
-    //   return accumulator;
-    // };
-    // const movies = roomMovies.reduce(findMoviesWithoutVote, []);
-
-    const movies = userVotes.diff(roomMovies);
     res.status(200).json(movies);
   } catch (error) {
     res.status(401).json({ message: error.message });
@@ -113,7 +107,7 @@ const create = async (req, res) => {
 
     // create vote or skip if vote already exists
     const currentVote =
-      (await Votes.findOne(roomId, movieId, userId)) ||
+      (await Votes.findOne(roomId, userId)) ||
       (await Votes.create(roomId, movieId, userId, like));
     res.status(200).json(currentVote);
   } catch (error) {
