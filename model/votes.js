@@ -27,9 +27,12 @@ const create = async (roomId, movieId, userId, like = null) => {
     like,
   });
 };
+const findOne = async (roomId, userId) => {
+  return await Vote.findOne({ roomId, owner: userId });
+};
 
 const find = async (roomId, userId) => {
-  return await Vote.findOne({ roomId, owner: userId });
+  return await Vote.find({ roomId, owner: userId });
 };
 
 const createForRoom = async roomId => {
@@ -51,4 +54,5 @@ module.exports = {
   createForRoom,
   create,
   find,
+  findOne,
 };

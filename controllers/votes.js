@@ -1,23 +1,30 @@
 const Votes = require('../model/votes.js');
 const Rooms = require('../model/rooms.js');
 
+Array.prototype.diff = function (movies) {
+  return this.filter(function (vote) {
+    return movies.movieId === vote.movieId;
+  });
+};
+
 const list = async (req, res) => {
   try {
     const { roomId } = req.body;
     const userId = req.user.id;
-    //TODO создать макссив votes после присоединения в команту если его нет
+
     const room = await Rooms.findById(roomId);
     const roomMovies = room.movies;
-    const userVotes = await Votes.find(roomId, userId);
-    //сделать через filter
-    const findMoviesWithoutVote = (accumulator, movie) => {
-      userVotes.find(vote => vote.movieId === movie)
-        ? accumulator.push(number)
-        : null;
-      return accumulator;
-    };
-    const movies = roomMovies.reduce(findMoviesWithoutVote, []);
+    const userVotes = (await Votes.find(roomId, userId)) || [];
 
+    // const findMoviesWithoutVote = (accumulator, movie) => {
+    //   !!userVotes.filter(vote => vote.movieId === movie.id)
+    //     ? accumulator.push(movie)
+    //     : null;
+    //   return accumulator;
+    // };
+    // const movies = roomMovies.reduce(findMoviesWithoutVote, []);
+
+    const movies = userVotes.diff(roomMovies);
     res.status(200).json(movies);
   } catch (error) {
     res.status(401).json({ message: error.message });
@@ -102,24 +109,13 @@ const mockup = async (req, res) => {
 const create = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { roomId, movieId, nextMovieId, like } = req.body;
-    console.log(room);
+    const { roomId, movieId, like } = req.body;
+
     // create vote or skip if vote already exists
     const currentVote =
-      (await Votes.find(roomId, movieId, userId)) ||
+      (await Votes.findOne(roomId, movieId, userId)) ||
       (await Votes.create(roomId, movieId, userId, like));
-
-    // array of user votes in this room
-
-    // const userMovies = userVotes.data.movies
-    // array of rooms movies
-    const room = await Rooms.findById(roomId);
-    // const roomMovies = room.data.movies
-    // array of unvoted movies
-    // const unvotedMovies
-    // send unvoted movie as next vote
-    // const nextVote = unvotedMovies[0];
-    // res.status(200).json({nextVote, currentVote});
+    res.status(200).json(currentVote);
   } catch (error) {
     console.log(error);
   }
