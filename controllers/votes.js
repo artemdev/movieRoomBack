@@ -3,10 +3,22 @@ const Rooms = require('../model/rooms.js');
 
 const list = async (req, res) => {
   try {
-    const { roomId, userId } = req.body;
+    const { roomId } = req.body;
+    const userId = req.user.id;
     //TODO создать макссив votes после присоединения в команту если его нет
-    const votes = await Votes.find({ roomId, owner: userId });
-    res.status(200).json(votes);
+    const room = await Rooms.findById(roomId);
+    const roomMovies = room.movies;
+    const userVotes = await Votes.find(roomId, userId);
+    //сделать через filter
+    const findMoviesWithoutVote = (accumulator, movie) => {
+      userVotes.find(vote => vote.movieId === movie)
+        ? accumulator.push(number)
+        : null;
+      return accumulator;
+    };
+    const movies = roomMovies.reduce(findMoviesWithoutVote, []);
+
+    res.status(200).json(movies);
   } catch (error) {
     res.status(401).json({ message: error.message });
   }
@@ -94,11 +106,11 @@ const create = async (req, res) => {
     console.log(room);
     // create vote or skip if vote already exists
     const currentVote =
-      (await Votes.find(roomId, userId)) ||
+      (await Votes.find(roomId, movieId, userId)) ||
       (await Votes.create(roomId, movieId, userId, like));
 
     // array of user votes in this room
-    const userVotes = await Votes.find(roomId, userId);
+
     // const userMovies = userVotes.data.movies
     // array of rooms movies
     const room = await Rooms.findById(roomId);

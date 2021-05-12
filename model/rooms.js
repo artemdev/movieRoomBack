@@ -5,7 +5,7 @@ const create = async body => {
 };
 
 const findById = async id => {
-  return await Room.findOne(id);
+  return await Room.findOne({ _id: id });
 };
 
 module.exports = {
