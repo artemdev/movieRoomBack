@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const { Schema, model, SchemaTypes } = mongoose;
@@ -38,5 +39,6 @@ const userSchema = new Schema(
 );
 
 const Room = model("room", userSchema);
+
 
 module.exports = Room;

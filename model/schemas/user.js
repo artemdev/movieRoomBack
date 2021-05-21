@@ -1,3 +1,4 @@
+
 const { Schema, model } = require("mongoose");
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
@@ -67,5 +68,6 @@ userSchema.methods.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 const User = model("user", userSchema);
+
 
 module.exports = User;

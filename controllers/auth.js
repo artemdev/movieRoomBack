@@ -4,6 +4,7 @@ const { httpCode } = require("../model/helpers/constants");
 const EmailService = require("../services/email");
 const { nanoid } = require("nanoid");
 require("dotenv").config();
+
 const SECRET_KEY = process.env.JWT_SECRET;
 
 const reg = async (req, res) => {
@@ -41,8 +42,10 @@ const reg = async (req, res) => {
   } catch (e) {
     console.log(e);
 
+
     res.status(httpCode.BADREQUEST).json({
       message: "Ошибка от Joi или другой валидационной библиотеки",
+
     });
   }
 };
@@ -59,6 +62,7 @@ const login = async (req, res) => {
         status: "error",
         code: httpCode.UNAUTHORIZED,
         message: "Email or password is wrong",
+
       });
     }
     const id = user._id;
@@ -67,6 +71,7 @@ const login = async (req, res) => {
     await Users.updateToken(id, token);
     res.status(httpCode.OK).json({
       status: "success",
+
       code: httpCode.OK,
       data: {
         token,
@@ -79,6 +84,7 @@ const login = async (req, res) => {
   } catch (e) {
     res.status(httpCode.UNAUTHORIZED).json({
       message: "Email or password is wrong",
+
     });
   }
 };
@@ -87,6 +93,7 @@ const logout = async (req, res) => {
   const id = req.user.id;
   Users.updateToken(id, null);
   return res.status(httpCode.NOCONTENT).json({ message: "Nothing" });
+
 };
 
 module.exports = {

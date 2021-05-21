@@ -3,7 +3,6 @@ const logger = require('morgan');
 const cors = require('cors');
 const app = express();
 const path = require('path');
-
 const collectionsRouter = require('./routes/api/collections');
 const authRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
@@ -26,6 +25,5 @@ app.use('/api/rooms', roomsRouter);
 app.get('/', (req, res) => {
   res.send(req.query);
 });
-
 app.use('/static', express.static('public'));
 module.exports = app;

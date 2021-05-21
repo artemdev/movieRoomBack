@@ -1,3 +1,4 @@
+
 const Room = require('./schemas/room.js');
 
 const list = async () => {
@@ -12,9 +13,9 @@ const create = async ({ title, userId, isOpen, url, movies, votes }) => {
     url,
     movies,
   });
+
 };
 
 module.exports = {
   create,
   list,
-};
