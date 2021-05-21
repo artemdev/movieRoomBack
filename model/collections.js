@@ -1,15 +1,15 @@
-const Collection = require('../model/schemas/collection.js');
-const mongoose = require('mongoose');
-require('../model/schemas/collection.js');
-require('dotenv').config();
-const axios = require('axios');
+const Collection = require("../model/schemas/collection.js");
+const mongoose = require("mongoose");
+require("../model/schemas/collection.js");
+require("dotenv").config();
+const axios = require("axios");
 
 const COLLECTIONS_URL = `https://api.themoviedb.org/3/collection`;
-const EN = 'en-US';
-const RU = 'ru-RU';
-const copy = async id => {
+const EN = "en-US";
+const RU = "ru-RU";
+const copy = async (id) => {
   const { data } = await axios.get(
-    `${COLLECTIONS_URL}/${id}?api_key=${process.env.MOVIEDB_API_KEY}&language=${RU}`,
+    `${COLLECTIONS_URL}/${id}?api_key=${process.env.MOVIEDB_API_KEY}&language=${RU}`
   );
 
   const body = {
@@ -26,7 +26,7 @@ const list = async () => {
   return await Collection.find({});
 };
 
-const findById = async id => {
+const findById = async (id) => {
   return await Collection.findOne({ id });
 };
 

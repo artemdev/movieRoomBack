@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const { Schema, model } = mongoose;
+const { Schema, model, SchemaTypes } = mongoose;
 
 const userSchema = new Schema(
   {
@@ -29,10 +29,14 @@ const userSchema = new Schema(
     votes: {
       type: Array,
     },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: "user",
+    },
   },
-  { versionKey: false, timestamps: true },
+  { versionKey: false, timestamps: true }
 );
 
-const Room = model('room', userSchema);
+const Room = model("room", userSchema);
 
 module.exports = Room;
