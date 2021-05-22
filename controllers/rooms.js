@@ -1,39 +1,35 @@
-const Room = require("../model/rooms.js");
+
+const Rooms = require('../model/rooms');
+const { httpCode } = require('../model/helpers/constants');
+
+require('dotenv').config();
 
 const create = async (req, res) => {
-  const userId = req.user.id;
-  const data = { title: req.body.title, movies: req.body.movies };
   try {
-    const room = await Room.create({ ...data, owner: userId });
-    res.status(200).json(room);
+    const body = req.body;
+    const room = await Rooms.create(body);
+    return res.status(httpCode.OK).json(room);
   } catch (error) {
-    console.log(error);
+    return res.status(httpCode.REJECTED).json({
+      error,
+    });
   }
 };
 
-const findRoom = async (req, res, next) => {
+const list = async (req, res) => {
   try {
-    const room = await Room.findById(req.params.roomId);
-    if (room) {
-      return res.status(200).json({
-        status: "success",
-        code: 200,
-        data: {
-          room,
-        },
-      });
-    }
-    return res.status(401).json({
-      status: "error",
-      code: 401,
-      message: "BAD REQUEST",
+    const room = await Rooms.list({});
+    return res.status(httpCode.OK).json({
+      ...room,
     });
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    return res.status(httpCode.REJECTED).json({
+      error,
+    });
   }
 };
 
 module.exports = {
+  list,
   create,
-  findRoom,
 };

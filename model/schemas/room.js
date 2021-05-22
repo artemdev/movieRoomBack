@@ -1,43 +1,44 @@
-const mongoose = require('mongoose');
-const { nanoid } = require('nanoid');
 
-const { Schema, SchemaTypes, model } = mongoose;
+const mongoose = require("mongoose");
 
-const roomSchema = new Schema(
+const { Schema, model, SchemaTypes } = mongoose;
+
+const userSchema = new Schema(
   {
     title: {
       type: String,
-      //   required: [true, 'Please set name of the room'],
+    },
+    userId: {
+      type: String,
+    },
+    votes: {
+      type: String,
+    },
+    userId: {
+      type: String,
+    },
+    url: {
+      type: String,
     },
     isOpen: {
-      type: Boolean,
-      //   required: [true, 'Room should be opened or closed'],
-      default: true,
-    },
-    totalVotes: {
       type: String,
-      default: '0',
+      default: true,
     },
     movies: {
       type: Array,
     },
-    url: {
-      type: String,
-      default: nanoid(),
-      required: [true, 'Please specify url'],
+    votes: {
+      type: Array,
     },
     owner: {
       type: SchemaTypes.ObjectId,
-      ref: 'user',
+      ref: "user",
     },
   },
-  { versionKey: false, timestamps: true },
+  { versionKey: false, timestamps: true }
 );
 
-roomSchema.methods.setUrl = async function () {
-  return this;
-};
+const Room = model("room", userSchema);
 
-const Room = model('room', roomSchema);
 
 module.exports = Room;

@@ -1,32 +1,33 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const gravatar = require('gravatar');
+
+const { Schema, model } = require("mongoose");
+const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 const SALT_WORK_FACTOR = 8;
-const { Schema, model } = mongoose;
+
 const userSchema = new Schema(
   {
     name: {
       type: String,
       minLength: 2,
-      default: 'Guest',
+      default: "Guest",
     },
     email: {
       type: String,
-      required: [true, 'Email required'],
+      required: [true, "Email required"],
       unique: true,
     },
     password: {
       type: String,
-      required: [true, 'Password required'],
+      required: [true, "Password required"],
     },
     token: {
       type: String,
-      default: 'none',
+      default: "none",
     },
     subscription: {
       type: String,
-      enum: ['free', 'pro', 'premium'],
-      default: 'free',
+      enum: ["free", "pro", "premium"],
+      default: "free",
     },
     avatar: {
       type: String,
@@ -38,21 +39,25 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    // verifyToken: {
-    //     type: String,
-    //     required: [true, 'Verify token required'],
-    // },
-    token: String,
+    verifyToken: {
+      type: String,
+      required: [true, "Verify token required"],
+    },
+    // TODO Хранить будем рефреш токен
+    token: {
+      type: String,
+      default: null,
+    },
   },
-  { versionKey: false, timestamps: true },
+  { versionKey: false, timestamps: true }
 );
 
-userSchema.path('email').validate(function (value) {
+userSchema.path("email").validate(function (value) {
   const re = /\S+@\S+\.\S+/;
   return re.test(String(value).toLowerCase());
 });
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
     return next();
   }
   const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
@@ -62,6 +67,7 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
-const User = model('user', userSchema);
+const User = model("user", userSchema);
+
 
 module.exports = User;

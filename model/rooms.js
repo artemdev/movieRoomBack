@@ -1,19 +1,21 @@
-const Room = require("./schemas/room.js");
 
-const create = async (body) => {
-  return await Room.create(body);
+const Room = require('./schemas/room.js');
+
+const list = async () => {
+  return await Room.find({});
 };
+const create = async ({ title, userId, isOpen, url, movies, votes }) => {
+  return await Room.create({
+    votes,
+    title,
+    userId,
+    isOpen,
+    url,
+    movies,
+  });
 
-const findById = async (id) => {
-  try {
-    const room = await Room.findOne({ _id: id });
-    return room;
-  } catch (e) {
-    console.log(e);
-  }
 };
 
 module.exports = {
   create,
-  findById,
-};
+  list,
