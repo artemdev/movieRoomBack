@@ -44,8 +44,7 @@ const reg = async (req, res) => {
 
 
     res.status(httpCode.BADREQUEST).json({
-      message: "Ошибка от Joi или другой валидационной библиотеки",
-
+      message: "Ошибка от Joi или другой валидационной библиотеки!",
     });
   }
 };
@@ -67,7 +66,10 @@ const login = async (req, res) => {
     }
     const id = user._id;
     const payload = { id };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "2h" });
+    const token = jwt.sign(payload, SECRET_KEY, {
+      //TODO
+      expiresIn: "300d",
+    });
     await Users.updateToken(id, token);
     res.status(httpCode.OK).json({
       status: "success",
@@ -91,7 +93,8 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   const id = req.user.id;
-  Users.updateToken(id, null);
+  console.log(req.user.id);
+  await Users.updateToken(id, null);
   return res.status(httpCode.NOCONTENT).json({ message: "Nothing" });
 
 };
