@@ -42,7 +42,7 @@ const reg = async (req, res) => {
     console.log(e);
 
     res.status(httpCode.BADREQUEST).json({
-      message: "Ошибка от Joi или другой валидационной библиотеки",
+      message: "Ошибка от Joi или другой валидационной библиотеки!",
     });
   }
 };
