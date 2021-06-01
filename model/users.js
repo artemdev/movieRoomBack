@@ -1,3 +1,4 @@
+
 const User = require("./schemas/user.js");
 
 const findByEmail = async (email) => {
@@ -14,6 +15,7 @@ const create = async ({ name, email, password, sex, verify, verifyToken }) => {
   // const user = new User({ name, email, password, sex, verify, verifyToken });
   // return await user.save();
   //TODO
+
   return await User.create({
     name,
     email,
@@ -37,6 +39,7 @@ const updateAvatar = async (id, avatar) => {
 };
 
 // const verify = async () => {};
+
 module.exports = {
   findByEmail,
   findByVerifyToken,
@@ -46,4 +49,5 @@ module.exports = {
   findById,
   updateAvatar,
   //   verify,
+
 };
