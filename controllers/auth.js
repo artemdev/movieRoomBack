@@ -75,11 +75,13 @@ const login = async (req, res) => {
       code: httpCode.OK,
       data: {
         token,
-        verify,
-        user: {
-          email: user.email,
-          subscription: user.subscription,
-        },
+        verify: user.verify,
+        email: user.email,
+        subscription: user.subscription,
+        // user: {
+        //   email: user.email,
+        //   subscription: user.subscription,
+        // },
       },
     });
   } catch (e) {
