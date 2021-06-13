@@ -70,15 +70,15 @@ const login = async (req, res) => {
       expiresIn: "300d",
     });
     await Users.updateToken(id, token);
-    res.status(httpCode.OK).json({
+    return res.status(httpCode.OK).json({
       status: "success",
       code: httpCode.OK,
       data: {
         token,
+        verify,
         user: {
           email: user.email,
           subscription: user.subscription,
-          verify: user.verify,
         },
       },
     });
