@@ -12,18 +12,18 @@ const findById = async (id) => {
   return await User.findOne({ _id: id });
 };
 const create = async ({ name, email, password, sex, verify, verifyToken }) => {
-  // const user = new User({ name, email, password, sex, verify, verifyToken });
-  // return await user.save();
+  const user = new User({ name, email, password, sex, verify, verifyToken });
+  return await user.save();
   //TODO
+  // return await User.create({
+  //   name,
+  //   email,
+  //   password,
+  //   sex,
+  //   verify,
+  //   verifyToken,
+  // });
 
-  return await User.create({
-    name,
-    email,
-    password,
-    sex,
-    verify,
-    verifyToken,
-  });
 };
 
 const updateToken = async (id, token) => {

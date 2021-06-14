@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 const schemaRegistrationUser = Joi.object({
   name: Joi.string().alphanum().min(2).max(30).required(),
@@ -6,21 +6,21 @@ const schemaRegistrationUser = Joi.object({
     .required()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
+      tlds: { allow: ["com", "net"] },
     }),
-  password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+  password: Joi.string().required().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
   subscription: Joi.string().optional(),
 });
 
 const schemaLoginUser = Joi.object({
-  token: [Joi.string(), Joi.number()],
+  // token: [Joi.string(), Joi.number()],
   email: Joi.string()
     .required()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
+      tlds: { allow: ["com", "net"] },
     }),
-  password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+  password: Joi.string().required().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
 });
 
 const validate = (schema, obj, next) => {

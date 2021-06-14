@@ -20,6 +20,7 @@ const reg = async (req, res) => {
         message: 'Email in use',
       });
     }
+    //TODO email
     const verifyToken = nanoid();
     // const emailService = new EmailService(process.env.NODE_ENV);
     // await emailService.sendEmail(verifyToken, email, name);
@@ -37,6 +38,7 @@ const reg = async (req, res) => {
         email: newUser.email,
         subscription: newUser.subscription,
         avatar: newUser.avatar,
+        verify: newUser.verify,
       },
     });
   } catch (e) {
@@ -53,8 +55,8 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await Users.findByEmail(email);
-    const validPassword = await user.validPassword(password);
-    if (!user || !validPassword) {
+    const validPassword = await user?.validPassword(password);
+    if (!user || !validPassword || !user.verify) {
       //TODO
       // if (!user || !validPassword || !user.verify) {
       return res.status(httpCode.UNAUTHORIZED).json({
@@ -71,16 +73,18 @@ const login = async (req, res) => {
       expiresIn: "300d",
     });
     await Users.updateToken(id, token);
-    res.status(httpCode.OK).json({
-      status: 'success',
-
+    return res.status(httpCode.OK).json({
+      status: "success",
       code: httpCode.OK,
       data: {
         token,
-        user: {
-          email: user.email,
-          subscription: user.subscription,
-        },
+        verify: user.verify,
+        email: user.email,
+        subscription: user.subscription,
+        // user: {
+        //   email: user.email,
+        //   subscription: user.subscription,
+        // },
       },
     });
   } catch (e) {
@@ -97,8 +101,31 @@ const logout = async (req, res) => {
   return res.status(httpCode.NOCONTENT).json({ message: "Nothing" });
 };
 
+const verify = async (req, res) => {
+  try {
+    const user = Users.findByVerifyToken(req.params.token);
+    if (user) {
+      await Users.updateVerifyToken(user.id, true, null);
+      return res.status(httpCode.OK).json({
+        status: "success",
+        code: httpCode.OK,
+        message: "Verification successful!",
+      });
+    }
+    return res.status(httpCode.BADREQUEST).json({
+      status: "error",
+      code: httpCode.BADREQUEST,
+      data: "Bad request",
+      message: "Link is not valid",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   reg,
   login,
   logout,
+  verify,
 };
