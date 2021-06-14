@@ -1,3 +1,4 @@
+
 const User = require("./schemas/user.js");
 
 const findByEmail = async (email) => {
@@ -22,6 +23,7 @@ const create = async ({ name, email, password, sex, verify, verifyToken }) => {
   //   verify,
   //   verifyToken,
   // });
+
 };
 
 const updateToken = async (id, token) => {
@@ -37,6 +39,7 @@ const updateAvatar = async (id, avatar) => {
 };
 
 // const verify = async () => {};
+
 module.exports = {
   findByEmail,
   findByVerifyToken,
@@ -46,4 +49,5 @@ module.exports = {
   findById,
   updateAvatar,
   //   verify,
+
 };
