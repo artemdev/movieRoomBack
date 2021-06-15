@@ -80,6 +80,7 @@ const login = async (req, res) => {
         token,
         verify: user.verify,
         email: user.email,
+        name: user.name,
         subscription: user.subscription,
         // user: {
         //   email: user.email,
