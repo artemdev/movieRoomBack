@@ -22,8 +22,8 @@ const reg = async (req, res) => {
     }
     //TODO email
     const verifyToken = nanoid();
-    // const emailService = new EmailService(process.env.NODE_ENV);
-    // await emailService.sendEmail(verifyToken, email, name);
+    const emailService = new EmailService(process.env.NODE_ENV);
+    await emailService.sendEmail(verifyToken, email, name);
 
     const newUser = await Users.create({
       ...req.body,
@@ -46,7 +46,6 @@ const reg = async (req, res) => {
 
     res.status(httpCode.BADREQUEST).json({
       message: 'Ошибка от Joi или другой валидационной библиотеки',
-
     });
   }
 };
@@ -70,11 +69,11 @@ const login = async (req, res) => {
 
     const token = jwt.sign(payload, SECRET_KEY, {
       //TODO
-      expiresIn: "300d",
+      expiresIn: '300d',
     });
     await Users.updateToken(id, token);
     return res.status(httpCode.OK).json({
-      status: "success",
+      status: 'success',
       code: httpCode.OK,
       data: {
         token,
@@ -99,7 +98,7 @@ const logout = async (req, res) => {
   const id = req.user.id;
   console.log(req.user.id);
   await Users.updateToken(id, null);
-  return res.status(httpCode.NOCONTENT).json({ message: "Nothing" });
+  return res.status(httpCode.NOCONTENT).json({ message: 'Nothing' });
 };
 
 const verify = async (req, res) => {
@@ -108,16 +107,16 @@ const verify = async (req, res) => {
     if (user) {
       await Users.updateVerifyToken(user.id, true, null);
       return res.status(httpCode.OK).json({
-        status: "success",
+        status: 'success',
         code: httpCode.OK,
-        message: "Verification successful!",
+        message: 'Verification successful!',
       });
     }
     return res.status(httpCode.BADREQUEST).json({
-      status: "error",
+      status: 'error',
       code: httpCode.BADREQUEST,
-      data: "Bad request",
-      message: "Link is not valid",
+      data: 'Bad request',
+      message: 'Link is not valid',
     });
   } catch (error) {
     next(error);
