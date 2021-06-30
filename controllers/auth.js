@@ -29,10 +29,19 @@ const reg = async (req, res) => {
       verify: false,
       verifyToken,
     });
+
+    // const payload = Math.floor(Date.now() / 1000) - 30;
+
+    // const token = jwt.sign({ data: payload }, SECRET_KEY, {
+    //   //TODO
+    //   expiresIn: "300d",
+    // });
+
     return res.status(httpCode.CREATE).json({
       status: "success",
       code: httpCode.CREATE,
       data: {
+        // token,
         name: newUser.name,
         email: newUser.email,
         subscription: newUser.subscription,
@@ -69,7 +78,7 @@ const login = async (req, res) => {
       //TODO
       expiresIn: "300d",
     });
-    await Users.updateToken(id, token);
+    await Users.updateToken(id, user.token);
     return res.status(httpCode.OK).json({
       status: "success",
       code: httpCode.OK,
@@ -99,6 +108,21 @@ const logout = async (req, res) => {
   return res.status(httpCode.NOCONTENT).json({ message: "Nothing" });
 };
 
+const currentUser = async (req, res) => {
+  const token = req.get("Authorization")?.split(" ")[1];
+  const { email, name } = await Users.findByToken(token);
+  return res.status(httpCode.OK).json({
+    status: "success",
+    code: httpCode.OK,
+    data: {
+      token,
+      verify,
+      email,
+      name,
+    },
+  });
+};
+
 const verify = async (req, res) => {
   try {
     const user = Users.findByVerifyToken(req.params.token);
@@ -126,4 +150,5 @@ module.exports = {
   login,
   logout,
   verify,
+  currentUser,
 };
