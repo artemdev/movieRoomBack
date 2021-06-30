@@ -6,8 +6,8 @@ const findByEmail = async (email) => {
 const findByVerifyToken = async (verifyToken) => {
   return await User.findOne({ verifyToken });
 };
-const findByToken = async (verifyToken) => {
-  return await User.findOne({ verifyToken });
+const findByToken = async (token) => {
+  return await User.findOne({ token });
 };
 
 const findById = async (id) => {
@@ -48,5 +48,6 @@ module.exports = {
   updateVerifyToken,
   findById,
   updateAvatar,
+  findByToken,
   //   verify,
 };
