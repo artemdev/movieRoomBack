@@ -1,5 +1,7 @@
+
 const express = require('express');
 const router = express.Router();
+
 const RoomsController = require('../../../controllers/rooms.js');
 
 router.get('/', RoomsController.list);

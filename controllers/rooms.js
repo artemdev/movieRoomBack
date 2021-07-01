@@ -1,3 +1,4 @@
+
 const Rooms = require('../model/rooms');
 const { httpCode } = require('../model/helpers/constants');
 

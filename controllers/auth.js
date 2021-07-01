@@ -1,9 +1,10 @@
-const jwt = require("jsonwebtoken");
-const Users = require("../model/users");
-const { httpCode } = require("../model/helpers/constants");
-const EmailService = require("../services/email");
-const { nanoid } = require("nanoid");
-require("dotenv").config();
+const jwt = require('jsonwebtoken');
+const Users = require('../model/users');
+const { httpCode } = require('../model/helpers/constants');
+const EmailService = require('../services/email');
+const { nanoid } = require('nanoid');
+require('dotenv').config();
+
 const SECRET_KEY = process.env.JWT_SECRET;
 
 const reg = async (req, res) => {
@@ -13,10 +14,10 @@ const reg = async (req, res) => {
 
     if (user) {
       return res.status(httpCode.CONFLICT).json({
-        status: "error",
+        status: 'error',
         code: httpCode.CONFLICT,
-        data: "Conflict",
-        message: "Email in use",
+        data: 'Conflict',
+        message: 'Email in use',
       });
     }
     //TODO email
@@ -38,7 +39,7 @@ const reg = async (req, res) => {
     // });
 
     return res.status(httpCode.CREATE).json({
-      status: "success",
+      status: 'success',
       code: httpCode.CREATE,
       data: {
         // token,
@@ -53,7 +54,7 @@ const reg = async (req, res) => {
     console.log(e);
 
     res.status(httpCode.BADREQUEST).json({
-      message: "Ошибка от Joi или другой валидационной библиотеки",
+      message: 'Ошибка от Joi или другой валидационной библиотеки',
     });
   }
 };
@@ -67,21 +68,22 @@ const login = async (req, res) => {
       //TODO
       // if (!user || !validPassword || !user.verify) {
       return res.status(httpCode.UNAUTHORIZED).json({
-        status: "error",
+        status: 'error',
         code: httpCode.UNAUTHORIZED,
-        message: "Email or password is wrong",
+        message: 'Email or password is wrong',
       });
     }
     const id = user._id;
     const payload = { id };
+
     const token = jwt.sign(payload, SECRET_KEY, {
       //TODO
-      expiresIn: "300d",
+      expiresIn: '300d',
     });
     await Users.updateToken(id, token);
     // await Users.updateToken(id, user.token);
     return res.status(httpCode.OK).json({
-      status: "success",
+      status: 'success',
       code: httpCode.OK,
       data: {
         token,
@@ -97,7 +99,7 @@ const login = async (req, res) => {
     });
   } catch (e) {
     res.status(httpCode.UNAUTHORIZED).json({
-      message: "Email or password is wrong",
+      message: 'Email or password is wrong',
     });
   }
 };
@@ -106,7 +108,7 @@ const logout = async (req, res) => {
   const id = req.user.id;
   console.log(req.user.id);
   await Users.updateToken(id, null);
-  return res.status(httpCode.NOCONTENT).json({ message: "Nothing" });
+  return res.status(httpCode.NOCONTENT).json({ message: 'Nothing' });
 };
 
 const verify = async (req, res) => {
@@ -115,16 +117,16 @@ const verify = async (req, res) => {
     if (user) {
       await Users.updateVerifyToken(user.id, true, null);
       return res.status(httpCode.OK).json({
-        status: "success",
+        status: 'success',
         code: httpCode.OK,
-        message: "Verification successful!",
+        message: 'Verification successful!',
       });
     }
     return res.status(httpCode.BADREQUEST).json({
-      status: "error",
+      status: 'error',
       code: httpCode.BADREQUEST,
-      data: "Bad request",
-      message: "Link is not valid",
+      data: 'Bad request',
+      message: 'Link is not valid',
     });
   } catch (error) {
     next(error);
