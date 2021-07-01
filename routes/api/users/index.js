@@ -1,22 +1,23 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 const {
-    currentUser,
-    avatars,
-    sendEmail,
-    verifyToken,
-} = require('../../../controllers/users.js')
-const guard = require('../../../model/helpers/guard')
-const upload = require('../../../model/helpers/upload')
+  currentUser,
+  avatars,
+  sendEmail,
+  verifyToken,
+} = require("../../../controllers/users.js");
+const guard = require("../../../model/helpers/guard");
+const upload = require("../../../model/helpers/upload");
 
-const { validateUploadAvatar } = require('./validation')
-router.get('/current', guard, currentUser)
-router.post('/sendEmail', sendEmail)
+const { validateUploadAvatar } = require("./validation");
+// router.get("/current", guard, currentUser);
+router.get("/current/:token", currentUser);
+router.post("/sendEmail", sendEmail);
 router.patch(
-    '/avatars',
-    [guard, upload.single('avatar'), validateUploadAvatar],
-    avatars
-)
-router.get('/verify/:token', verifyToken)
+  "/avatars",
+  [guard, upload.single("avatar"), validateUploadAvatar],
+  avatars
+);
+router.get("/verify/:token", verifyToken);
 
-module.exports = router
+module.exports = router;

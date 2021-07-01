@@ -2,6 +2,9 @@ const sgMail = require("@sendgrid/mail");
 const Mailgen = require("mailgen");
 const config = require("../config/email.json");
 require("dotenv").config();
+
+//TODO Указать реальную ссылку на приложение
+// const contactLink = "http://localhost:3000/login";
 class EmailService {
   #sender = sgMail;
   #GenerateTemplate = Mailgen;
@@ -39,6 +42,7 @@ class EmailService {
           button: {
             color: "#22BC66", // Optional action button color
             text: "Сonfirm your account",
+            // link: contactLink,
             link: `${this.link}/api/users/verify/${verifyToken}`,
           },
         },

@@ -30,10 +30,19 @@ const reg = async (req, res) => {
       verify: false,
       verifyToken,
     });
+
+    // const payload = Math.floor(Date.now() / 1000) - 30;
+
+    // const token = jwt.sign({ data: payload }, SECRET_KEY, {
+    //   //TODO
+    //   expiresIn: "300d",
+    // });
+
     return res.status(httpCode.CREATE).json({
       status: 'success',
       code: httpCode.CREATE,
       data: {
+        // token,
         name: newUser.name,
         email: newUser.email,
         subscription: newUser.subscription,
@@ -72,6 +81,7 @@ const login = async (req, res) => {
       expiresIn: '300d',
     });
     await Users.updateToken(id, token);
+    // await Users.updateToken(id, user.token);
     return res.status(httpCode.OK).json({
       status: 'success',
       code: httpCode.OK,
