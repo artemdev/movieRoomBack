@@ -64,7 +64,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await Users.findByEmail(email);
     const validPassword = await user?.validPassword(password);
-    if (!user || !validPassword || !user.verify) {
+    if (!user || !validPassword) {
       //TODO
       // if (!user || !validPassword || !user.verify) {
       return res.status(httpCode.UNAUTHORIZED).json({
@@ -91,10 +91,6 @@ const login = async (req, res) => {
         email: user.email,
         name: user.name,
         subscription: user.subscription,
-        // user: {
-        //   email: user.email,
-        //   subscription: user.subscription,
-        // },
       },
     });
   } catch (e) {

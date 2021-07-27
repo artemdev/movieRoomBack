@@ -1,12 +1,12 @@
-const Users = require("../model/users");
-const { httpCode } = require("../model/helpers/constants");
-const { send } = require("../services/email.js");
-const fs = require("fs/promises");
-const path = require("path");
-const Jimp = require("jimp");
+const Users = require('../model/users');
+const { httpCode } = require('../model/helpers/constants');
+const { send } = require('../services/email.js');
+const fs = require('fs/promises');
+const path = require('path');
+const Jimp = require('jimp');
 
-require("dotenv").config();
-const createFolderIfNotExists = require("../model/helpers/createDir");
+require('dotenv').config();
+const createFolderIfNotExists = require('../model/helpers/createDir');
 
 const currentUser = async (req, res, next) => {
   try {
@@ -17,7 +17,7 @@ const currentUser = async (req, res, next) => {
     const user = await Users.findByToken(token);
     if (!user) {
       return res.status(httpCode.NOTFOUND).json({
-        message: "Not authorized!",
+        message: 'Not authorized!',
       });
     }
     return res.status(httpCode.OK).json({
@@ -32,13 +32,33 @@ const currentUser = async (req, res, next) => {
   }
 };
 
+const all = async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    const userMap = {};
+    users.forEach(user => {
+      userMap[user._id] = user;
+    });
+
+    return res.json({
+      status: 'success',
+      code: httpCode.OK,
+      data: {
+        userMap,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const avatars = async (req, res, next) => {
   try {
     const id = req.user.id;
     const avatarUrl = await saveAvatarToStatic(req);
     await Users.updateAvatar(id, avatarUrl);
     return res.json({
-      status: "success",
+      status: 'success',
       code: httpCode.OK,
       data: {
         avatarUrl,
@@ -49,7 +69,7 @@ const avatars = async (req, res, next) => {
   }
 };
 
-const saveAvatarToStatic = async (req) => {
+const saveAvatarToStatic = async req => {
   const id = req.user.id;
   const AVATARS_OF_USERS = process.env.AVATARS_OF_USERS;
   const pathFile = req.file.path;
@@ -63,7 +83,7 @@ const saveAvatarToStatic = async (req) => {
   await fs.rename(pathFile, path.join(AVATARS_OF_USERS, id, newNameAvatar));
   try {
     await fs.unlink(
-      path.join(process.cwd(), AVATARS_OF_USERS, req.user.avatar)
+      path.join(process.cwd(), AVATARS_OF_USERS, req.user.avatar),
     );
   } catch (e) {
     console.log(e);
@@ -89,16 +109,16 @@ const verifyToken = async (req, res, next) => {
     if (user) {
       await Users.updateVerifyToken(user.id, true, false);
       return res.json({
-        status: "success",
+        status: 'success',
         code: httpCode.OK,
-        message: "Verified",
+        message: 'Verified',
       });
     }
     return res.status(httpCode.BADREQUEST).json({
-      status: "Error",
+      status: 'Error',
       code: httpCode.BADREQUEST,
-      data: "Bad request",
-      message: "Link is not valid",
+      data: 'Bad request',
+      message: 'Link is not valid',
     });
   } catch (error) {
     next(error);
@@ -110,4 +130,5 @@ module.exports = {
   avatars,
   sendEmail,
   verifyToken,
+  all,
 };
