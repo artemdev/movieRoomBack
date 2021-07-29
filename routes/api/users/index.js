@@ -20,6 +20,7 @@ router.patch(
   avatars,
 );
 router.get('/verify/:token', verifyToken);
+
 router.get('/', all);
 
 module.exports = router;

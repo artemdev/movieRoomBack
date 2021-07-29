@@ -31,18 +31,18 @@ const reg = async (req, res) => {
       verifyToken,
     });
 
-    // const payload = Math.floor(Date.now() / 1000) - 30;
+    const payload = Math.floor(Date.now() / 1000) - 30;
 
-    // const token = jwt.sign({ data: payload }, SECRET_KEY, {
-    //   //TODO
-    //   expiresIn: "300d",
-    // });
+    const token = jwt.sign({ data: payload }, SECRET_KEY, {
+      //TODO
+      expiresIn: '300d',
+    });
 
     return res.status(httpCode.CREATE).json({
       status: 'success',
       code: httpCode.CREATE,
       data: {
-        // token,
+        token,
         name: newUser.name,
         email: newUser.email,
         subscription: newUser.subscription,

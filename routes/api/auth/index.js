@@ -13,9 +13,7 @@ const {
 const { createAccountLimiter } = require('../../../model/helpers/rate-limit');
 
 router.post('/register', reg);
-// router.post("/register", createAccountLimiter, registrationUser, reg);
 router.post('/login', login);
-// router.post("/login", login);
 router.post('/logout', guard, logout);
 
 router.get('/verify/:token', verify);

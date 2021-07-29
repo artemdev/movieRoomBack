@@ -108,11 +108,7 @@ const verifyToken = async (req, res, next) => {
 
     if (user) {
       await Users.updateVerifyToken(user.id, true, false);
-      return res.json({
-        status: 'success',
-        code: httpCode.OK,
-        message: 'Verified',
-      });
+      return res.redirect('http://localhost:3000/collections');
     }
     return res.status(httpCode.BADREQUEST).json({
       status: 'Error',
