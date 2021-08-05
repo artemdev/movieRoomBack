@@ -11,7 +11,6 @@ const reg = async (req, res) => {
   try {
     const { email, name } = req.body;
     const user = await Users.findByEmail(email);
-
     if (user) {
       return res.status(httpCode.CONFLICT).json({
         status: 'error',
@@ -37,6 +36,7 @@ const reg = async (req, res) => {
       //TODO
       expiresIn: '300d',
     });
+    await Users.updateToken(user._id, token);
 
     return res.status(httpCode.CREATE).json({
       status: 'success',
@@ -102,7 +102,6 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   const id = req.user.id;
-  console.log(req.user.id);
   await Users.updateToken(id, null);
   return res.status(httpCode.NOCONTENT).json({ message: 'Nothing' });
 };

@@ -11,8 +11,7 @@ const guard = require('../../../model/helpers/guard');
 const upload = require('../../../model/helpers/upload');
 
 const { validateUploadAvatar } = require('./validation');
-// router.get("/current", guard, currentUser);
-router.get('/current/:token', currentUser);
+router.get('/current', guard, currentUser);
 router.post('/sendEmail', sendEmail);
 router.patch(
   '/avatars',
