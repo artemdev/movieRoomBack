@@ -9,8 +9,6 @@ const list = async (req, res) => {
     const room = await Rooms.findById(roomId);
     const roomMovies = room.movies;
     const userVotes = (await Votes.find(roomId, userId)) || [];
-    console.log(userVotes);
-    console.log(roomMovies);
     const findMoviesWithoutVote = (accumulator, movie) => {
       !userVotes.filter(vote => vote.movieId === movie.id)[0]
         ? accumulator.push(movie)

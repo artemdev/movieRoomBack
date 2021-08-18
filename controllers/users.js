@@ -11,9 +11,7 @@ const createFolderIfNotExists = require('../model/helpers/createDir');
 const currentUser = async (req, res, next) => {
   try {
     const id = req.user.id;
-    // const token = req.user.token;
     const user = await Users.findById(id);
-    // const user = await Users.findByToken(token);
     if (!user) {
       return res.status(httpCode.NOTFOUND).json({
         message: 'Not authorized!',

@@ -10,7 +10,6 @@ const list = async (req, res) => {
 };
 
 const findById = async (req, res) => {
-  console.log(req.params);
   try {
     const id = req.params.id;
     const collection = await Collection.findById(id);
@@ -24,7 +23,6 @@ const copy = async (req, res) => {
   try {
     const id = req.params.id;
     const collection = await Collection.copy(id);
-
     res.status(201).json(collection);
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -1,4 +1,3 @@
-
 const Rooms = require('../model/rooms');
 const { httpCode } = require('../model/helpers/constants');
 
@@ -17,10 +16,11 @@ const create = async (req, res) => {
 };
 
 const list = async (req, res) => {
+  const { roomId } = req.query;
   try {
-    const room = await Rooms.list({});
+    const movies = await Rooms.list(roomId);
     return res.status(httpCode.OK).json({
-      ...room,
+      ...movies[0],
     });
   } catch (error) {
     return res.status(httpCode.REJECTED).json({
