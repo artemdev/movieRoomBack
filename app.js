@@ -7,6 +7,7 @@ const collectionsRouter = require('./routes/api/collections');
 const authRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
 const roomsRouter = require('./routes/api/rooms');
+const votesRouter = require('./routes/api/votes');
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
@@ -21,6 +22,7 @@ app.use('/collections', collectionsRouter);
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use('/rooms', roomsRouter);
+app.use('/votes', votesRouter);
 
 app.get('/', (req, res) => {
   res.send(req.query);
