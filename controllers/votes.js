@@ -102,12 +102,27 @@ const create = async (req, res) => {
   try {
     const userId = req.user.id;
     const { roomId, movieId, like } = req.body;
-
-    // create vote or skip if vote already exists
-    const currentVote =
-      (await Votes.findOne(roomId, userId)) ||
+    //create vote
+    (await Votes.findOne(roomId, userId)) ||
       (await Votes.create(roomId, movieId, userId, like));
-    res.status(200).json(currentVote);
+    // return movies
+    const room = await Rooms.findById(roomId);
+    const roomMovies = room.movies;
+    const userVotes = (await Votes.find(roomId, userId)) || [];
+    const findMoviesWithoutVote = (accumulator, movie) => {
+      userVotes.map(vote => {
+        // console.log('vote movieId', vote.movieId);
+        // console.log('movieId', movie.id);
+        // console.log(+vote.movieId === +movie.id);
+        if (+vote.movieId !== +movie.id) {
+          accumulator.push(movie);
+        }
+      });
+      return accumulator;
+    };
+    const movies = roomMovies.reduce(findMoviesWithoutVote, []);
+    console.log(movies);
+    res.status(200).json(movies[0]);
   } catch (error) {
     console.log(error);
   }

@@ -16,8 +16,12 @@ const create = async ({ title, userId, isOpen, url, movies, votes }) => {
     movies,
   });
 };
+const findById = async id => {
+  return await Room.findOne({ _id: id });
+};
 
 module.exports = {
   create,
   list,
+  findById,
 };
