@@ -19,16 +19,16 @@ const withoutLike = async (roomId, userId) => {
 //     throw new Error('Contact not found');
 //   }
 // };
-const create = async (roomId, movieId, userId, like = null) => {
+const create = async (roomId, movieId, owner, like = null) => {
   return await Vote.create({
     roomId,
     movieId,
-    owner: userId,
+    owner,
     like,
   });
 };
-const findOne = async (roomId, userId) => {
-  return await Vote.findOne({ roomId, owner: userId });
+const findOne = async (roomId, owner, movieId) => {
+  return await Vote.findOne({ roomId, owner, movieId });
 };
 
 const find = async (roomId, userId) => {

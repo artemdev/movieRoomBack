@@ -3,22 +3,27 @@ const Rooms = require('../model/rooms.js');
 
 const list = async (req, res) => {
   try {
-    const { roomId } = req.body;
-    const userId = req.user.id;
-
+    const { roomId } = req.query;
+    const owner = req.user.id;
     const room = await Rooms.findById(roomId);
     const roomMovies = room.movies;
-    const userVotes = (await Votes.find(roomId, userId)) || [];
+    const userVotes = (await Votes.find(roomId, owner)) || [];
+
     const findMoviesWithoutVote = (accumulator, movie) => {
-      !userVotes.filter(vote => vote.movieId === movie.id)[0]
-        ? accumulator.push(movie)
-        : null;
+      const matchesFound = userVotes.filter(
+        vote => +vote.movieId === +movie.id,
+      ).length;
+
+      if (matchesFound === 0) {
+        accumulator.push(movie);
+      }
       return accumulator;
     };
     const movies = roomMovies.reduce(findMoviesWithoutVote, []);
 
-    res.status(200).json(movies);
+    res.status(200).json(movies[0]);
   } catch (error) {
+    console.log(error);
     res.status(401).json({ message: error.message });
   }
 };
@@ -100,47 +105,34 @@ const mockup = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const owner = req.user.id;
     const { roomId, movieId, like } = req.body;
     //create vote
-    (await Votes.findOne(roomId, userId)) ||
-      (await Votes.create(roomId, movieId, userId, like));
+
+    (await Votes.findOne(roomId, owner, movieId)) ||
+      (await Votes.create(roomId, movieId, owner, like));
+
     // return movies
     const room = await Rooms.findById(roomId);
     const roomMovies = room.movies;
-    const userVotes = (await Votes.find(roomId, userId)) || [];
+    const userVotes = (await Votes.find(roomId, owner)) || [];
+
     const findMoviesWithoutVote = (accumulator, movie) => {
-      userVotes.map(vote => {
-        // console.log('vote movieId', vote.movieId);
-        // console.log('movieId', movie.id);
-        // console.log(+vote.movieId === +movie.id);
-        if (+vote.movieId !== +movie.id) {
-          accumulator.push(movie);
-        }
-      });
+      const matchesFound = userVotes.filter(
+        vote => +vote.movieId === +movie.id,
+      ).length;
+
+      if (matchesFound === 0) {
+        accumulator.push(movie);
+      }
       return accumulator;
     };
     const movies = roomMovies.reduce(findMoviesWithoutVote, []);
-    console.log(movies);
+
     res.status(200).json(movies[0]);
   } catch (error) {
     console.log(error);
   }
-
-  //   if (!nextMovieId) {
-  //     res.status(200).json({ message: [] });
-  //   }
-
-  //   let nextVote = await Votes.find(roomId, nextMovieId, userId);
-
-  //   if (!nextVote) {
-  //     nextVote = await Votes.create(roomId, nextMovieId, userId);
-  //   }
-  //   res.status(200).json({ current: currentVote, next: nextVote });
-  //   // return next vote
-  // } catch (error) {
-  //   res.status(400).json({ message: error.message });
-  // }
 };
 
 module.exports = {
