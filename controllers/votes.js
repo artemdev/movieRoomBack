@@ -112,7 +112,6 @@ const create = async (req, res) => {
     (await Votes.findOne(roomId, owner, movieId)) ||
       (await Votes.create(roomId, movieId, owner, like));
 
-    // return movies
     const room = await Rooms.findById(roomId);
     const roomMovies = room.movies;
     const userVotes = (await Votes.find(roomId, owner)) || [];
@@ -128,8 +127,8 @@ const create = async (req, res) => {
       return accumulator;
     };
     const movies = roomMovies.reduce(findMoviesWithoutVote, []);
-
-    res.status(200).json(movies[0]);
+    const movie = movies[0] || {};
+    res.status(200).json(movie);
   } catch (error) {
     console.log(error);
   }
