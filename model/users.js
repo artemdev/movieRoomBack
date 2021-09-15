@@ -1,17 +1,16 @@
+const User = require('./schemas/user.js');
 
-const User = require("./schemas/user.js");
-
-const findByEmail = async (email) => {
-  return await User.findOne({ email: email });
+const findByEmail = async email => {
+  return await User.findOne({ email });
 };
-const findByVerifyToken = async (verifyToken) => {
+const findByVerifyToken = async verifyToken => {
   return await User.findOne({ verifyToken });
 };
-const findByToken = async (token) => {
+const findByToken = async token => {
   return await User.findOne({ token });
 };
 
-const findById = async (id) => {
+const findById = async id => {
   return await User.findOne({ _id: id });
 };
 const create = async ({ name, email, password, sex, verify, verifyToken }) => {
@@ -26,7 +25,6 @@ const create = async ({ name, email, password, sex, verify, verifyToken }) => {
   //   verify,
   //   verifyToken,
   // });
-
 };
 
 const updateToken = async (id, token) => {
@@ -53,5 +51,4 @@ module.exports = {
   updateAvatar,
   findByToken,
   //   verify,
-
 };
